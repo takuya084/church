@@ -1,0 +1,333 @@
+/* ========== 共通スタイル ========== */
+* {
+  box-sizing: border-box;
+}
+
+body {
+  margin: 0;
+  font-family: sans-serif;
+  background-color: #f9f9f9;
+  color: #333;
+  line-height: 1.6;
+}
+
+.container {
+  max-width: 960px;
+  margin: 0 auto;
+  padding: 0 16px;
+}
+
+a {
+  text-decoration: none;
+  color: inherit;
+}
+
+/* ========== ヘッダー ========== */
+.site-header {
+  background-color: #334155;
+  color: white;
+}
+
+.site-header nav a:hover {
+  text-decoration: underline;
+}
+
+/* .header-inner {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  padding: 20px 16px;
+} */
+
+.header-inner {
+  display: flex;
+  /* 横並びにする */
+  justify-content: space-between;
+  /* 子要素を両端に配置 */
+  align-items: center;
+  /* 縦方向に中央揃え */
+  padding: 20px 16px;
+}
+
+.branding {
+  display: flex;
+  /* flex-direction: column; */
+}
+
+.branding img {
+  height: 64px;
+  /* アイコンの高さを固定 */
+  width: auto;
+  /* アスペクト比を維持 */
+  margin-right: 8px;
+  /* アイコンとテキストの間隔 */
+  object-fit: contain;
+  /* 画像の縦横比を保って収める */
+}
+
+.inner-title {
+  display: flex;
+  flex-direction: column;
+}
+
+.inner-title p {
+  margin: 0;
+}
+
+.tagline {
+  margin: 0;
+  font-size: 14px;
+  color: white;
+}
+
+.site-title {
+  margin: 0;
+  font-size: 24px;
+}
+
+/* ========== ボタン ========== */
+.btn {
+  background-color: #238e23;
+  /* HSL(120, 60%, 35%)：落ち着いた濃いグリーン */
+  color: white;
+  padding: 10px 20px;
+  border-radius: 6px;
+  font-weight: bold;
+  transition: background-color 0.3s ease;
+}
+
+.btn:hover {
+  background-color: #196619;
+  /* HSL(120, 60%, 25%)：さらに濃いホバー色 */
+}
+
+.btn-large {
+  font-size: 18px;
+  padding: 14px 28px;
+}
+
+.btn-cta {
+  background-color: #ff7f50;
+  padding: 14px 28px;
+  font-size: 18px;
+  border-radius: 8px;
+}
+
+.btn-cta:hover {
+  background-color: #ff8e1a;
+}
+
+/* ========== ヒーローセクション ========== */
+.hero {
+  color: white;
+  padding: 100px 0;
+  text-align: center;
+}
+
+.hero h2 {
+  font-size: 36px;
+  margin-bottom: 16px;
+}
+
+.hero p {
+  font-weight: bold;
+  font-size: 18px;
+  max-width: 600px;
+  margin: 0 auto 32px;
+  line-height: 1.8;
+}
+
+/* ========== 特徴セクション ========== */
+.features {
+  background-color: #ffffff;
+  padding: 80px 0;
+  text-align: center;
+}
+
+.features h2 {
+  font-size: 28px;
+  margin-bottom: 40px;
+}
+
+.feature-cards {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 24px;
+  justify-content: center;
+}
+
+.card {
+  background-color: #f5f5f5;
+  padding: 24px;
+  border-radius: 12px;
+  width: calc((100% - 48px) / 3);
+  box-sizing: border-box;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.06);
+  transition: transform 0.3s ease;
+}
+
+.card:hover {
+  transform: translateY(-4px);
+}
+
+.card-icon {
+  width: 64px;
+  height: 64px;
+  margin-bottom: 8px;
+}
+
+.en-text-w {
+  display: block;
+  font-size: 0.9em;
+  color: white;
+  line-height: 1.2;
+  margin-top: 2px;
+}
+
+.en-text-g {
+  display: block;
+  font-size: 0.9em;
+  color:  #555;
+  line-height: 1.2;
+  margin-top: 2px;
+}
+
+/* ========== ダウンロードセクション ========== */
+.cta {
+  background-color: #334155;
+  color: white;
+  padding: 40px 0 80px 0;
+  text-align: center;
+}
+
+.cta h2 {
+  font-size: 28px;
+  margin-bottom: 16px;
+}
+
+.cta p {
+  font-size: 18px;
+  margin-bottom: 32px;
+}
+
+/* ========== フッター ========== */
+.site-footer {
+  background-color: #1e293b;
+  color: #aaa;
+  padding: 32px 0;
+  text-align: center;
+  font-size: 14px;
+}
+
+/* ========== レスポンシブ ========== */
+@media (max-width: 600px) {
+  .feature-cards {
+    flex-direction: column;
+    align-items: center;
+  }
+
+  .card {
+    width: 100%;
+    max-width: 320px;
+  }
+
+  .btn,
+  .btn-large,
+  .btn-cta {
+    width: 100%;
+    display: block;
+    text-align: center;
+    margin: 0 auto;
+  }
+
+  .hero h2 {
+    font-size: 24px;
+  }
+
+  .hero p {
+    font-size: 16px;
+  }
+}
+
+/* ------- お問い合わせフォーム専用スタイル ------- */
+.form-box {
+  background-color: #fff;
+  padding: 40px;
+  border-radius: 8px;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05);
+  margin: 60px 0;
+}
+
+.form-box__title {
+  font-size: 24px;
+  margin-bottom: 24px;
+  color: #334155; /* ヘッダーと揃えるダークブルー */
+  text-align: center;
+}
+
+/* 各入力グループ */
+.form-group {
+  margin-bottom: 1.5rem;
+}
+
+.form-group__label {
+  display: block;
+  font-weight: bold;
+  margin-bottom: 0.5rem;
+  color: #334155;
+}
+
+.form-group__input,
+.form-group__textarea {
+  width: 100%;
+  padding: 12px;
+  border: 1px solid #ccc;
+  border-radius: 4px;
+  font-size: 1rem;
+}
+
+.form-group__textarea {
+  resize: vertical;
+  min-height: 120px;
+}
+
+/* 送信ボタンの余白調整 */
+.contact-form__btn {
+  display: block;
+  width: 100%;
+  max-width: 240px;
+  margin: 2rem auto 0;
+}
+
+/* お問い合わせフォームのレスポンシブ */
+@media (max-width: 600px) {
+  .form-box {
+    padding: 20px;
+    margin: 40px 0;
+  }
+}
+
+/* ====== ページ全体を縦方向の flex 布置にしてフッターを下に張り付かせる ====== */
+html,
+body {
+  height: 100%;
+}
+
+body {
+  display: flex;
+  flex-direction: column;
+  min-height: 100vh;
+  margin: 0; /* 既存の余白リセット */
+}
+
+/* #contact セクションが残りスペースを占めるように */
+#contact {
+  flex: 1;
+}
+
+/* フッターを自動マージンで下部に */
+.site-footer {
+  margin-top: auto;
+}
+
+/* ====== お問い合わせボタンは既存CTAと同じなので特に追加スタイル不要 ====== */
