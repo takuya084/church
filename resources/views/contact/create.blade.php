@@ -16,7 +16,7 @@
     <!-- ヘッダー -->
     <header class="site-header">
         <div class="container header-inner">
-            <div class="branding">
+            {{-- <div class="branding">
                 <img src="{{ asset('logo/sda.png') }}" alt="SDA Logo">
                 <div class="inner-title">
                     <h1 class="site-title">
@@ -26,7 +26,24 @@
                         SDAキリスト教会</small>
                     </p>
                 </div>
-            </div>
+            </div> --}}
+
+            <a href="{{ route('home') }}" class="branding flex items-center gap-3">
+                <img
+                    src="{{ asset('logo/sda.png') }}"
+                    alt="SDA Logo"
+                    class="h-10 w-auto" 
+                />
+                <div class="inner-title">
+                    <h1 class="site-title text-xl font-bold">
+                        市原集会所
+                    </h1>
+                    <p class="text-sm text-gray-600">
+                        SDAキリスト教会
+                    </p>
+                </div>
+            </a>
+
             <nav>
                 @if (Route::has('login'))
                     @auth

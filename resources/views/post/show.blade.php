@@ -52,7 +52,7 @@
         {{-- YouTube 動画 --}}
         @if($post->youtubeUrls->isNotEmpty())
           <div class="mt-8 space-y-6">
-            <h2 class="text-lg font-semibold text-gray-800">関連動画</h2>
+            <h2 class="text-lg font-semibold text-gray-800">礼拝動画</h2>
             @foreach($post->youtubeUrls as $youtubeUrl)
               <div class="relative w-full" style="padding-top:56.25%;"> {{-- 16:9 --}}
                 <iframe

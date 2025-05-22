@@ -84,7 +84,7 @@ new #[Layout('components.layouts.auth')] class extends Component {
             autocomplete="new-password" :placeholder="__('Confirm password')" />
 
         <div>
-            <label for="avatar" class="block text-sm font-medium text-gray-700">Avatar</label>
+            <label for="avatar" class="block text-sm font-medium text-gray-700">アバター画像</label>
 
             @if ($avatar)
                 <div class="my-2">
