@@ -9,7 +9,7 @@ use Illuminate\Mail\Mailables\Content;
 use Illuminate\Mail\Mailables\Envelope;
 use Illuminate\Queue\SerializesModels;
 
-class ContactForm extends Mailable
+class CommentForm extends Mailable
 {
     use Queueable, SerializesModels;
 
@@ -17,10 +17,12 @@ class ContactForm extends Mailable
      * Create a new message instance.
      */
     public $inputs;
+    public $post;
 
-    public function __construct($inputs)
+    public function __construct($inputs, $post)
     {
         $this->inputs = $inputs;
+        $this->post = $post;
     }
 
     /**
@@ -29,7 +31,7 @@ class ContactForm extends Mailable
     public function envelope(): Envelope
     {
         return new Envelope(
-            subject: 'お問い合わせを受け付けました',
+            subject: 'コメントがありました',
         );
     }
 
@@ -39,9 +41,10 @@ class ContactForm extends Mailable
     public function content(): Content
     {
         return new Content(
-            view: 'emails.contact',
+            view: 'emails.comment',
             with:[
-                'inputs' => $this->inputs
+                'inputs' => $this->inputs,
+                'post' => $this->post,
             ]
         );
     }

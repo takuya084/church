@@ -44,7 +44,7 @@ new #[Layout('components.layouts.auth')] class extends Component {
             {{ __('A new verification link has been sent to the email address you provided during registration.') }}
         </flux:text> --}}
         <flux:text class="text-center">
-            ご登録ありがとうございます♪　
+            ご登録ありがとうございます♪
             お手数ですが、メールアドレスの確認をさせてください。下記ボタンをクリックしてくださいね。
         </flux:text>
     @endif

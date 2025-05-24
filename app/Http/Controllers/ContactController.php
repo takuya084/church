@@ -23,10 +23,10 @@ class ContactController extends Controller
             'email'=>'required|email|max:255',
             'body'=>'required|max:1000',
         ]);
-        Contact::create($inputs);
+        $contact = Contact::create($inputs);
 
-        // Mail::to(config('mail.admin'))->send(new ContactForm($inputs));
-        // Mail::to($inputs['email'])->send(new ContactForm($inputs));
+        Mail::to(config('mail.admin'))->send(new ContactForm($contact));
+        Mail::to($inputs['email'])->send(new ContactForm($contact));
 
         return back()->with('message', 'メールを送信したのでご確認ください');
     }
