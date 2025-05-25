@@ -67,8 +67,7 @@
                 {{-- バリデーションエラーがある場合はここに表示 --}}
                 <x-message :message="session('message')" />
 
-                <form method="post" action="{{ route('contact.store') }}" enctype="multipart/form-data"
-                    class="contact-form">
+                <form method="post" action="{{ route('contact.store') }}" class="contact-form">
                     @csrf
 
                     <div class="form-group">

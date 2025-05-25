@@ -4,10 +4,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>
-    市原集会所公式ホームページ<br>
-    <small class="en-title">Ichihara Church Official Website</small>
-  </title>
+  <title>市原集会所公式ホームページ | Ichihara Church Official Website</title>
   @vite(['resources/css/style.css'])
 </head>
 
