@@ -8,11 +8,11 @@
     @endif
 
     {{-- コメント入力フォーム --}}
-    <form wire:submit="save">
+    <form wire:submit="save" class=" mb-12">
         <textarea wire:model="body"
             class="bg-white w-full rounded-2xl px-4 mt-4 py-4 shadow-lg hover:shadow-2xl transition duration-500" cols="30"
             rows="3" placeholder="コメントを入力してください"></textarea>
-        <flux:button type="submit" class="float-right mr-4 mb-12">
+        <flux:button type="submit" class="float-right mr-4">
             コメントする
         </flux:button>
     </form> 
