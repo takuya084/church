@@ -20,7 +20,7 @@
             市原集会所
           </h1>
           <p>
-            SDAキリスト教会</small>
+            <small>SDAキリスト教会</small>
           </p>
         </div>
       </div>
