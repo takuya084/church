@@ -3,18 +3,16 @@
 use App\Models\User;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Session;
+use Illuminate\Support\Facades\Storage;
 use Illuminate\Validation\Rule;
 use Livewire\Volt\Component;
-// 追加
 use Livewire\WithFileUploads;
 
 new class extends Component {
-    // 追加
     use WithFileUploads;
 
     public string $name = '';
     public string $email = '';
-    // 追加
     public $avatar;
 
     /**
@@ -35,28 +33,23 @@ new class extends Component {
 
         $validated = $this->validate([
             'name' => ['required', 'string', 'max:255'],
-
             'email' => ['required', 'string', 'lowercase', 'email', 'max:255', Rule::unique(User::class)->ignore($user->id)],
-            // 追加
-            'avatar' => ['nullable', 'image', 'max:1024'],
+            'avatar' => ['nullable', 'image', 'mimes:jpg,jpeg,png,gif,webp', 'max:10240'],
         ]);
 
-        // 追加
         if ($this->avatar) {
             // 古いアバターを削除
             if ($user->avatar !== 'user_default.jpg') {
                 Storage::disk('public')->delete('avatar/' . $user->avatar);
             }
 
-            $timestamp = now()->format('YmdHis');
-            $originalName = $this->avatar->getClientOriginalName();
-            $filename = $timestamp . '_' . $originalName;
+            $extension = $this->avatar->getClientOriginalExtension() ?: 'jpg';
+            $filename = now()->format('YmdHis') . '_' . uniqid() . '.' . $extension;
             $this->avatar->storeAs('avatar', $filename, 'public');
             $validated['avatar'] = $filename;
         } else {
             unset($validated['avatar']);
         }
-        // 追加ここまで
 
         $user->fill($validated);
 
@@ -119,15 +112,12 @@ new class extends Component {
                 @endif
             </div>
 
-            {{-- 追加 --}}
             <div>
                 <label for="avatar" class="block text-sm font-medium text-gray-700">アバター</label>
                 <div class="my-2">
-                    {{-- 新しく選択した画像がある場合はそのプレビューを表示 --}}
                     @if ($avatar)
                         <p class="text-sm text-gray-500 mb-1">プレビュー：</p>
                         <img src="{{ $avatar->temporaryUrl() }}" alt="Avatar Preview" class="w-50 rounded-full">
-                        {{-- 選択されていない場合は現在のアバターを表示 --}}
                     @elseif (auth()->user()->avatar)
                         <p class="text-sm text-gray-500 mb-1">現在のアバター：</p>
                         <img src="{{ asset('storage/avatar/' . (auth()->user()->avatar ?? 'user_default.jpg')) }}"
@@ -135,10 +125,10 @@ new class extends Component {
                     @endif
                 </div>
 
+                <input type="file" id="avatar" wire:model="avatar" accept="image/jpeg,image/png,image/gif,image/webp"
+                    class="mt-1 block w-full text-sm text-gray-500 file:mr-4 file:py-2 file:px-4 file:rounded-lg file:border-0 file:text-sm file:font-semibold file:bg-gray-100 file:text-gray-700 hover:file:bg-gray-200" />
+                <p class="text-xs text-gray-400 mt-1">JPG, PNG, GIF, WebP（最大10MB）</p>
 
-                <flux:input id="avatar" type="file" wire:model="avatar" class="mt-1 block w-full" />
-
-                {{-- アップロード中の表示を追加 --}}
                 <div wire:loading wire:target="avatar" class="text-sm text-gray-500 mt-1">
                     アップロード中...
                 </div>
@@ -148,7 +138,6 @@ new class extends Component {
                 @enderror
 
             </div>
-            {{-- 追加ここまで --}}
 
             <div class="flex items-center gap-4">
                 <div class="flex items-center justify-end">

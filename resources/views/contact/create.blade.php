@@ -4,10 +4,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>
-        市原集会所公式ホームページ<br>
-        <small class="en-title">Ichihara Church Official Website</small>
-    </title>
+    <title>お問い合わせ | 市原集会所</title>
     @vite(['resources/css/style.css'])
 </head>
 
@@ -16,34 +13,13 @@
     <!-- ヘッダー -->
     <header class="site-header">
         <div class="container header-inner">
-            {{-- <div class="branding">
+            <a href="{{ route('home') }}" class="branding">
                 <img src="{{ asset('logo/sda.png') }}" alt="SDA Logo">
                 <div class="inner-title">
-                    <h1 class="site-title">
-                        市原集会所
-                    </h1>
-                    <p>
-                        SDAキリスト教会</small>
-                    </p>
-                </div>
-            </div> --}}
-
-            <a href="{{ route('home') }}" class="branding flex items-center gap-3">
-                <img
-                    src="{{ asset('logo/sda.png') }}"
-                    alt="SDA Logo"
-                    class="h-10 w-auto" 
-                />
-                <div class="inner-title">
-                    <h1 class="site-title text-xl font-bold">
-                        市原集会所
-                    </h1>
-                    <p class="text-sm text-gray-600">
-                        SDAキリスト教会
-                    </p>
+                    <h1 class="site-title">市原集会所</h1>
+                    <p><small style="font-size:12px; opacity:0.75; font-weight:400;">SDAキリスト教会</small></p>
                 </div>
             </a>
-
             <nav>
                 @if (Route::has('login'))
                     @auth
@@ -64,7 +40,6 @@
         <div class="container">
             <div class="form-box">
                 <h2 class="form-box__title">お問い合わせ</h2>
-                {{-- バリデーションエラーがある場合はここに表示 --}}
                 <x-message :message="session('message')" />
 
                 <form method="post" action="{{ route('contact.store') }}" class="contact-form">
@@ -73,21 +48,22 @@
                     <div class="form-group">
                         <label for="title" class="form-group__label">件名</label>
                         <input type="text" id="title" name="title" class="form-group__input"
-                            placeholder="Enter Title" value="{{ old('title') }}">
+                            placeholder="件名を入力してください" value="{{ old('title') }}">
                     </div>
 
                     <div class="form-group">
                         <label for="body" class="form-group__label">本文</label>
-                        <textarea id="body" name="body" class="form-group__textarea" rows="6">{{ old('body') }}</textarea>
+                        <textarea id="body" name="body" class="form-group__textarea" rows="6"
+                            placeholder="お問い合わせ内容を入力してください">{{ old('body') }}</textarea>
                     </div>
 
                     <div class="form-group">
                         <label for="email" class="form-group__label">メールアドレス</label>
                         <input type="email" id="email" name="email" class="form-group__input"
-                            placeholder="Enter Email" value="{{ old('email') }}">
+                            placeholder="example@email.com" value="{{ old('email') }}">
                     </div>
 
-                    <button type="submit" class="btn btn-cta btn-large">
+                    <button type="submit" class="btn btn-cta contact-form__btn">
                         送信する
                     </button>
                 </form>
@@ -98,7 +74,7 @@
 
     <!-- フッター -->
     <footer class="site-footer">
-        <small>&copy; 2025 市原集会所</small>
+        <small>&copy; {{ date('Y') }} 市原集会所</small>
     </footer>
 
 </body>

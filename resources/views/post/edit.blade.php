@@ -1,110 +1,106 @@
 <x-layouts.app>
-    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-        <div class="mx-4 sm:p-8">
-            <h2 class="font-semibold text-xl text-gray-800 leading-tight">
-                投稿の編集画面
-            </h2>
+    <div class="max-w-3xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
+        <div class="bg-white dark:bg-neutral-800 rounded-2xl shadow-sm border border-neutral-100 dark:border-neutral-700 overflow-hidden">
 
-            {{-- メッセージ表示用 --}}
-            <x-message :message="$errors->all()" type="error" />
-            <x-message :message="session('message')" type="success" />
+            {{-- Header --}}
+            <div class="bg-gradient-to-r from-gray-700 to-gray-600 px-6 py-5">
+                <h2 class="text-lg font-bold text-white tracking-wide">投稿の編集</h2>
+                <p class="text-sm text-gray-300 mt-1">内容を変更して送信してください</p>
+            </div>
 
-            <form method="post" action="{{ route('post.update', $post) }}" enctype="multipart/form-data">
-                @csrf
-                @method('patch')
+            <div class="p-6 sm:p-8">
+                {{-- メッセージ --}}
+                <x-message :message="$errors->all()" type="error" />
+                <x-message :message="session('message')" type="success" />
 
-                {{-- 件名 --}}
-                <div class="md:flex items-center mt-8">
-                    <div class="w-full flex flex-col">
-                        <label for="title" class="font-semibold leading-none mt-4">件名</label>
-                        <input
-                            type="text"
-                            name="title"
-                            id="title"
-                            class="w-auto py-2 pl-2 placeholder-gray-300 border border-gray-300 rounded-md"
-                            value="{{ old('title', $post->title) }}"
-                        >
-                    </div>
-                </div>
+                <form method="post" action="{{ route('post.update', $post) }}" class="space-y-6">
+                    @csrf
+                    @method('patch')
 
-                {{-- 本文 --}}
-                <div class="w-full flex flex-col">
-                    <label for="body" class="font-semibold leading-none mt-4">本文</label>
-                    <textarea
-                        name="body"
-                        id="body"
-                        class="w-auto py-2 pl-2 border border-gray-300 rounded-md"
-                        cols="30"
-                        rows="10"
-                    >{{ old('body', $post->body) }}</textarea>
-                </div>
-
-                {{-- 既存画像表示＆差し替え --}}
-                <div class="w-full flex flex-col">
-                    @if ($post->image)
-                        <div>(画像ファイル：{{ $post->image }})</div>
-                        <img
-                            src="{{ asset('storage/images/' . $post->image) }}"
-                            class="mx-auto my-4"
-                            style="height:300px;"
-                        >
-                    @endif
-                    <label for="image" class="font-semibold leading-none mt-4">画像</label>
+                    {{-- 説教題 --}}
                     <div>
-                        <flux:input id="image" type="file" name="image" />
+                        <label for="title" class="block text-sm font-semibold text-neutral-700 dark:text-neutral-300 mb-2">説教題</label>
+                        <input type="text" name="title" id="title"
+                               class="w-full px-4 py-3 bg-neutral-50 dark:bg-neutral-900 border border-neutral-200 dark:border-neutral-700 rounded-xl text-sm focus:outline-none focus:ring-2 focus:ring-gray-400/30 focus:border-gray-400 transition-all duration-200"
+                               value="{{ old('title', $post->title) }}">
                     </div>
-                </div>
 
-                {{-- YouTube URL 編集 --}}
-                <div class="w-full flex flex-col mt-6">
-                    <label class="font-semibold leading-none">YouTube 動画 URL</label>
-                    <div id="youtube-urls-wrapper" class="mt-2">
-                        @php
-                            $urlList = old('youtube_urls', $post->youtubeUrls->pluck('youtube_url')->toArray());
-                        @endphp
-                        @foreach ($urlList as $url)
-                            <input
-                                type="text"
-                                name="youtube_urls[]"
-                                placeholder="https://www.youtube.com/watch?v=…"
-                                class="w-full py-2 pl-2 border border-gray-300 rounded-md mb-2"
-                                value="{{ $url }}"
-                            >
-                        @endforeach
+                    {{-- 牧師名（プルダウン） --}}
+                    <div>
+                        <label for="pastor_id" class="block text-sm font-semibold text-neutral-700 dark:text-neutral-300 mb-2">牧師名</label>
+                        <select name="pastor_id" id="pastor_id"
+                                class="w-full px-4 py-3 bg-neutral-50 dark:bg-neutral-900 border border-neutral-200 dark:border-neutral-700 rounded-xl text-sm focus:outline-none focus:ring-2 focus:ring-gray-400/30 focus:border-gray-400 transition-all duration-200">
+                            <option value="">-- 選択してください --</option>
+                            @foreach ($pastors as $pastor)
+                                <option value="{{ $pastor->id }}" @selected(old('pastor_id', $post->pastor_id) == $pastor->id)>
+                                    {{ $pastor->name }}
+                                </option>
+                            @endforeach
+                        </select>
                     </div>
-                    <button
-                        type="button"
-                        id="add-url"
-                        class="mt-2 text-sm text-blue-600 hover:underline"
-                    >
-                        ＋ URL を追加
-                    </button>
-                </div>
 
-                {{-- 送信ボタン --}}
-                <flux:button variant="primary" type="submit" class="w-full mt-4">
-                    送信する
-                </flux:button>
-            </form>
+                    {{-- 聖書朗読箇所 --}}
+                    <div>
+                        <label for="bible_passage" class="block text-sm font-semibold text-neutral-700 dark:text-neutral-300 mb-2">聖書朗読箇所</label>
+                        <input type="text" name="bible_passage" id="bible_passage"
+                               class="w-full px-4 py-3 bg-neutral-50 dark:bg-neutral-900 border border-neutral-200 dark:border-neutral-700 rounded-xl text-sm focus:outline-none focus:ring-2 focus:ring-gray-400/30 focus:border-gray-400 transition-all duration-200"
+                               placeholder="例：ヨハネ 3:16-18"
+                               value="{{ old('bible_passage', $post->bible_passage) }}">
+                    </div>
+
+                    {{-- YouTube URL --}}
+                    <div>
+                        <label class="block text-sm font-semibold text-neutral-700 dark:text-neutral-300 mb-2">YouTube 動画 URL</label>
+                        <div id="youtube-urls-wrapper" class="space-y-2">
+                            @php
+                                $urlList = old('youtube_urls', $post->youtubeUrls->pluck('youtube_url')->toArray());
+                            @endphp
+                            @foreach ($urlList as $i => $url)
+                                <div class="youtube-url-row flex items-center gap-2" data-index="{{ $i }}">
+                                    <div class="flex flex-col gap-0.5">
+                                        <button type="button" onclick="moveUrl(this, -1)" title="上へ"
+                                                class="p-0.5 text-neutral-400 hover:text-neutral-700 dark:hover:text-neutral-200 transition-colors disabled:opacity-30">
+                                            <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24" stroke-width="2">
+                                                <path stroke-linecap="round" stroke-linejoin="round" d="m4.5 15.75 7.5-7.5 7.5 7.5" />
+                                            </svg>
+                                        </button>
+                                        <button type="button" onclick="moveUrl(this, 1)" title="下へ"
+                                                class="p-0.5 text-neutral-400 hover:text-neutral-700 dark:hover:text-neutral-200 transition-colors disabled:opacity-30">
+                                            <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24" stroke-width="2">
+                                                <path stroke-linecap="round" stroke-linejoin="round" d="m19.5 8.25-7.5 7.5-7.5-7.5" />
+                                            </svg>
+                                        </button>
+                                    </div>
+                                    <input type="text" name="youtube_urls[]"
+                                           placeholder="https://www.youtube.com/watch?v=…"
+                                           class="flex-1 px-4 py-3 bg-neutral-50 dark:bg-neutral-900 border border-neutral-200 dark:border-neutral-700 rounded-xl text-sm focus:outline-none focus:ring-2 focus:ring-gray-400/30 focus:border-gray-400 transition-all duration-200"
+                                           value="{{ $url }}">
+                                    <button type="button" onclick="removeUrl(this)" title="削除"
+                                            class="p-2 text-neutral-400 hover:text-red-500 transition-colors rounded-lg hover:bg-red-50 dark:hover:bg-red-900/20">
+                                        <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24" stroke-width="1.5">
+                                            <path stroke-linecap="round" stroke-linejoin="round" d="M6 18 18 6M6 6l12 12" />
+                                        </svg>
+                                    </button>
+                                </div>
+                            @endforeach
+                        </div>
+                        <button type="button" id="add-url"
+                                class="mt-3 inline-flex items-center gap-1 text-sm font-medium text-gray-600 dark:text-gray-400 hover:text-gray-800 dark:hover:text-gray-300 transition-colors">
+                            <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24" stroke-width="2">
+                                <path stroke-linecap="round" stroke-linejoin="round" d="M12 4.5v15m7.5-7.5h-15" />
+                            </svg>
+                            URL を追加
+                        </button>
+                    </div>
+
+                    {{-- Submit --}}
+                    <flux:button variant="primary" type="submit" class="w-full !py-3 !rounded-xl !text-sm !font-semibold">
+                        送信する
+                    </flux:button>
+                </form>
+            </div>
         </div>
     </div>
 
-    <script>
-        (function(){
-            const btn     = document.getElementById('add-url');
-            const wrapper = document.getElementById('youtube-urls-wrapper');
-            if (!btn || !wrapper) {
-                console.error('add-urlボタンまたはwrapperが見つかりません');
-                return;
-            }
-            btn.addEventListener('click', function(){
-                const input = document.createElement('input');
-                input.type        = 'text';
-                input.name        = 'youtube_urls[]';
-                input.placeholder = 'https://www.youtube.com/watch?v=…';
-                input.className   = 'w-full py-2 pl-2 border border-gray-300 rounded-md mb-2';
-                wrapper.appendChild(input);
-            });
-        })();
-    </script>
+    @include('post._youtube-url-script')
 </x-layouts.app>

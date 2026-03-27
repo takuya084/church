@@ -9,9 +9,8 @@ use Livewire\Attributes\Layout;
 use Livewire\Volt\Component;
 use Livewire\WithFileUploads;
 
-// 追加
 use Illuminate\Support\Facades\Notification;
-use App\Notifications\NewUserRegistered; 
+use App\Notifications\NewUserRegistered;
 
 new #[Layout('components.layouts.auth')] class extends Component {
     use WithFileUploads;
@@ -31,20 +30,17 @@ new #[Layout('components.layouts.auth')] class extends Component {
             'name' => ['required', 'string', 'max:255'],
             'email' => ['required', 'string', 'lowercase', 'email', 'max:255', 'unique:' . User::class],
             'password' => ['required', 'string', 'confirmed', Rules\Password::defaults()],
-            'avatar' => ['nullable', 'image', 'max:1024'],
+            'avatar' => ['nullable', 'image', 'mimes:jpg,jpeg,png,gif,webp', 'max:10240'],
         ]);
 
         if ($this->avatar) {
-            $timestamp = now()->format('YmdHis');
-            $originalName = $this->avatar->getClientOriginalName();
-            $filename = $timestamp . '_' . $originalName;
+            $extension = $this->avatar->getClientOriginalExtension() ?: 'jpg';
+            $filename = now()->format('YmdHis') . '_' . uniqid() . '.' . $extension;
             $this->avatar->storeAs('avatar', $filename, 'public');
             $validated['avatar'] = $filename;
         } else {
             unset($validated['avatar']);
         }
-
-        $validated['password'] = Hash::make($validated['password']);
 
         event(new Registered(($user = User::create($validated))));
 
@@ -92,9 +88,10 @@ new #[Layout('components.layouts.auth')] class extends Component {
                     <img src="{{ $avatar->temporaryUrl() }}" alt="Avatar Preview" class="w-50 rounded-full">
                 </div>
             @endif
-            <flux:input type="file" id="avatar" wire:model="avatar" class="mt-1 block w-full" />
+            <input type="file" id="avatar" wire:model="avatar" accept="image/jpeg,image/png,image/gif,image/webp"
+                class="mt-1 block w-full text-sm text-gray-500 file:mr-4 file:py-2 file:px-4 file:rounded-lg file:border-0 file:text-sm file:font-semibold file:bg-gray-100 file:text-gray-700 hover:file:bg-gray-200" />
+            <p class="text-xs text-gray-400 mt-1">JPG, PNG, GIF, WebP（最大10MB）</p>
 
-            {{-- アップロード中の表示 --}}
             <div wire:loading wire:target="avatar" class="text-sm text-gray-500 mt-1">
                 アップロード中...
             </div>

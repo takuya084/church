@@ -13,17 +13,13 @@
   <!-- ヘッダー -->
   <header class="site-header">
     <div class="container header-inner">
-      <div class="branding">
+      <a href="{{ url('/') }}" class="branding">
         <img src="{{ asset('logo/sda.png') }}" alt="SDA Logo">
         <div class="inner-title">
-          <h1 class="site-title">
-            市原集会所
-          </h1>
-          <p>
-            <small>SDAキリスト教会</small>
-          </p>
+          <h1 class="site-title">市原集会所</h1>
+          <p><small style="font-size:12px; opacity:0.75; font-weight:400;">SDAキリスト教会</small></p>
         </div>
-      </div>
+      </a>
       <nav>
         @if (Route::has('login'))
           @auth
@@ -40,14 +36,10 @@
   </header>
 
   <!-- ヒーロー -->
-  <section class="hero" style="background: url('{{ asset('images/hero-bg.jpg') }}') no-repeat center/cover;">
+  <section class="hero" style="background-image: url('{{ asset('images/hero-bg.jpg') }}');">
     <div class="container">
-      <h2>
-        毎週土曜日 9時半～12時
-      </h2>
-      <p>
-        お気軽にお越しください！
-      </p>
+      <h2>毎週土曜日 9時半〜12時</h2>
+      <p>お気軽にお越しください！</p>
     </div>
   </section>
 
@@ -100,27 +92,23 @@
       </p>
       <iframe
         src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3248.499247944447!2d140.1044929!3d35.4919315!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x602299efd73ebfb5%3A0x6d48b181682533c5!2zU0RB5biC5Y6f6ZuG5Lya5omA!5e0!3m2!1sja!2sjp!4v1747109758026!5m2!1sja!2sjp"
-        width="100%" height="450" style="border:0;" allowfullscreen loading="lazy"
+        width="100%" height="400" style="border:0;" allowfullscreen loading="lazy"
         referrerpolicy="no-referrer-when-downgrade">
       </iframe>
     </div>
-    <div class="container">
+    <div class="container" style="margin-top: 16px;">
       <p>
         ご質問等あれば、お気軽にご連絡ください。<br>
         <small class="en-text-w">If you have any questions, feel free to contact us.</small>
       </p>
-      <a href="{{ route('contact.create') }}" class="btn-cta">
-        連絡フォームへ
-      </a>
+      <a href="{{ route('contact.create') }}" class="btn-cta">連絡フォームへ</a>
     </div>
   </section>
 
   <!-- フッター -->
   <footer class="site-footer">
-    <small>&copy; 2025 市原集会所</small>
+    <small>&copy; {{ date('Y') }} 市原集会所</small>
   </footer>
-
-  
 
 </body>
 

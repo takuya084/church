@@ -29,7 +29,7 @@ class PostPolicy
      */
     public function create(User $user): bool
     {
-        return false;
+        return !$user->isGuest();
     }
 
     /**
@@ -37,6 +37,10 @@ class PostPolicy
      */
     public function update(User $user, Post $post): bool
     {
+        if ($user->isGuest()) {
+            return false;
+        }
+
         return $user->id == $post->user_id;
     }
 
@@ -45,6 +49,10 @@ class PostPolicy
      */
     public function delete(User $user, Post $post): bool
     {
+        if ($user->isGuest()) {
+            return false;
+        }
+
         //作成者は削除可能
         if ($user->id == $post->user_id) {
             return true;

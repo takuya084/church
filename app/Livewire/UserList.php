@@ -23,7 +23,7 @@ class UserList extends Component
     public function mount():void
     {
         // $this->users = User::all();
-        $this->roles = Role::all();
+        $this->roles = Role::where('name', '!=', 'guest')->get();
     }
 
     public function render()

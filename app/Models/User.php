@@ -60,8 +60,13 @@ class User extends Authenticatable implements MustVerifyEmail
             ->implode('');
     }
 
+    public function isGuest(): bool
+    {
+        return $this->roles->contains('name', 'guest');
+    }
+
     public function posts(){
-        $this->hasMany(Post::class);
+        return $this->hasMany(Post::class);
     }
 
     public function comments(){

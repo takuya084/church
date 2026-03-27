@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 
 use App\Models\Contact;
+use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Mail;
 use App\Mail\ContactForm;
 
@@ -26,8 +27,13 @@ class ContactController extends Controller
         
         Contact::create($inputs);
 
-        Mail::to(config('mail.admin'))->send(new ContactForm($inputs));
-        Mail::to($inputs['email'])->send(new ContactForm($inputs));
+        try {
+            Mail::to(config('mail.admin'))->send(new ContactForm($inputs));
+            Mail::to($inputs['email'])->send(new ContactForm($inputs));
+        } catch (\Exception $e) {
+            Log::error('連絡フォームのメール送信に失敗しました: ' . $e->getMessage());
+            return back()->with('message', 'お問い合わせを受け付けました。メール送信に問題がありましたが、内容は保存されています。');
+        }
 
         return back()->with('message', 'メールを送信したのでご確認ください');
     }

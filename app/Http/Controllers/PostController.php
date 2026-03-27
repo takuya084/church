@@ -2,9 +2,9 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Pastor;
 use App\Models\Post;
 use Illuminate\Http\Request;
-// 追加
 use Illuminate\Support\Facades\Gate;
 
 
@@ -26,7 +26,12 @@ class PostController extends Controller
      */
     public function create()
     {
-        return view('post.create');
+        if (auth()->user()->isGuest()) {
+            abort(403);
+        }
+
+        $pastors = Pastor::orderBy('name')->get();
+        return view('post.create', compact('pastors'));
     }
 
     /**
@@ -34,25 +39,21 @@ class PostController extends Controller
      */
     public function store(Request $request)
     {
+        if (auth()->user()->isGuest()) {
+            abort(403);
+        }
+
         $request->validate([
             'title'            => 'required|string|max:255',
-            'body'             => 'required|string|max:1000',
-            'image'            => 'nullable|image|max:1024',   // 画像は任意
+            'pastor_id'        => 'nullable|exists:pastors,id',
+            'bible_passage'    => 'nullable|string|max:255',
             'youtube_urls.*'   => 'nullable|url',
         ]);
         $post = new Post();
         $post->title = $request->title;
-        $post->body = $request->body;
+        $post->pastor_id = $request->pastor_id;
+        $post->bible_passage = $request->bible_passage;
         $post->user_id = auth()->user()->id;
-
-        if (request('image')) {
-            // $nameを$originalに変更
-            $original = request()->file('image')->getClientOriginalName();
-            // 名前に日時追加
-            $name = date('Ymd_His') . '_' . $original;
-            request()->file('image')->move('storage/images', $name);
-            $post->image = $name;
-        }
 
         $post->save();
 
@@ -81,9 +82,9 @@ class PostController extends Controller
      */
     public function edit(Post $post)
     {
-        // Gate::authorize('post-owner', $post);
         Gate::authorize('update', $post);
-        return view('post.edit', compact('post'));
+        $pastors = Pastor::orderBy('name')->get();
+        return view('post.edit', compact('post', 'pastors'));
     }
 
     /**
@@ -91,24 +92,17 @@ class PostController extends Controller
      */
     public function update(Request $request, Post $post)
     {
-        // Gate::authorize('post-owner', $post);
         Gate::authorize('update', $post);
         $inputs = $request->validate([
             'title'            => 'required|string|max:255',
-            'body'             => 'required|string|max:1000',
-            'image'            => 'nullable|image|max:1024',
+            'pastor_id'        => 'nullable|exists:pastors,id',
+            'bible_passage'    => 'nullable|string|max:255',
             'youtube_urls.*'   => 'nullable|url',
         ]);
 
         $post->title = $inputs['title'];
-        $post->body = $inputs['body'];
-
-        if (request('image')) {
-            $original = request()->file('image')->getClientOriginalName();
-            $name = date('Ymd_His') . '_' . $original;
-            $file = request()->file('image')->move('storage/images', $name);
-            $post->image = $name;
-        }
+        $post->pastor_id = $inputs['pastor_id'] ?? null;
+        $post->bible_passage = $inputs['bible_passage'] ?? null;
 
         $post->save();
 
@@ -130,12 +124,6 @@ class PostController extends Controller
      */
     public function destroy(Post $post)
     {
-        // if (Gate::allows('post-owner', $post) || Gate::allows('admin', $post)) {
-        //     $post->delete();
-        //     return redirect()->route('post.index')->with('message', '投稿を削除しました');
-        // } else {
-        //     abort(403, 'Unauthorized action.');
-        // }
         Gate::authorize('delete', $post);
         $post->delete();
         return redirect()->route('post.index')->with('message', '投稿を削除しました');

@@ -1,0 +1,17 @@
+{
+  "permissions": {
+    "allow": [
+      "Bash(npm run:*)",
+      "Bash(npm install:*)",
+      "Bash(xargs basename:*)",
+      "Bash(find /mnt/c/laravel/church/config -type f -name \"*.php\" -exec basename {})",
+      "Bash(composer require:*)",
+      "Bash(php -m)",
+      "Bash(sudo apt-get:*)",
+      "Bash(php artisan:*)",
+      "Bash(php -i)",
+      "Bash(composer remove:*)",
+      "Bash(grep -r Gate:: /mnt/c/laravel/church/app --include=*.php)"
+    ]
+  }
+}
