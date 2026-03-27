@@ -6,5 +6,13 @@
 *.md diff=markdown
 *.php diff=php
 
+*.png -text
+*.jpg -text
+*.jpeg -text
+*.gif -text
+*.ico -text
+*.webp -text
+*.svg -text
+
 CHANGELOG.md export-ignore
 README.md export-ignore
