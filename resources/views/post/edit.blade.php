@@ -48,6 +48,14 @@
                                value="{{ old('bible_passage', $post->bible_passage) }}">
                     </div>
 
+                    {{-- コメント --}}
+                    <div>
+                        <label for="body" class="block text-sm font-semibold text-neutral-700 dark:text-neutral-300 mb-2">コメント</label>
+                        <textarea name="body" id="body" rows="5"
+                                  class="w-full px-4 py-3 bg-neutral-50 dark:bg-neutral-900 border border-neutral-200 dark:border-neutral-700 rounded-xl text-sm focus:outline-none focus:ring-2 focus:ring-gray-400/30 focus:border-gray-400 transition-all duration-200"
+                                  placeholder="コメントを入力してください">{{ old('body', $post->body) }}</textarea>
+                    </div>
+
                     {{-- YouTube URL --}}
                     <div>
                         <label class="block text-sm font-semibold text-neutral-700 dark:text-neutral-300 mb-2">YouTube 動画 URL</label>

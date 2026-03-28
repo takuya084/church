@@ -97,12 +97,14 @@ class PostController extends Controller
             'title'            => 'required|string|max:255',
             'pastor_id'        => 'nullable|exists:pastors,id',
             'bible_passage'    => 'nullable|string|max:255',
+            'body'             => 'nullable|string',
             'youtube_urls.*'   => 'nullable|url',
         ]);
 
         $post->title = $inputs['title'];
         $post->pastor_id = $inputs['pastor_id'] ?? null;
         $post->bible_passage = $inputs['bible_passage'] ?? null;
+        $post->body = $inputs['body'] ?? null;
 
         $post->save();
 
