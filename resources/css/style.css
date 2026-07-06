@@ -378,6 +378,42 @@ img {
   padding: 16px 36px;
 }
 
+/* トップページの「礼拝の動画を見る」ボタン（高齢者向けに大きく） */
+.btn-watch {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 12px;
+  background: #dc2626;
+  color: white;
+  font-size: clamp(20px, 4vw, 26px);
+  font-weight: 700;
+  padding: 22px 48px;
+  border-radius: 100px;
+  box-shadow: 0 6px 24px rgba(0, 0, 0, 0.25);
+  transition: var(--transition);
+  animation: fadeInUp 0.8s ease-out 0.4s both;
+}
+
+.btn-watch:hover {
+  background: #b91c1c;
+  transform: translateY(-2px);
+  box-shadow: 0 10px 32px rgba(0, 0, 0, 0.3);
+}
+
+.btn-watch svg {
+  width: 1.2em;
+  height: 1.2em;
+  flex-shrink: 0;
+}
+
+@media (max-width: 640px) {
+  .btn-watch {
+    width: 100%;
+    padding: 20px 24px;
+  }
+}
+
 /* ========== Footer ========== */
 .site-footer {
   background: #1f2937;

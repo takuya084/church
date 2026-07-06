@@ -117,29 +117,6 @@ new #[Layout('components.layouts.auth')] class extends Component {
         </div>
     </form>
 
-    {{-- ゲストログイン --}}
-    <div class="relative">
-        <div class="absolute inset-0 flex items-center">
-            <div class="w-full border-t border-zinc-200 dark:border-zinc-700"></div>
-        </div>
-        <div class="relative flex justify-center text-xs">
-            <span class="bg-white dark:bg-zinc-900 px-3 text-zinc-400">または</span>
-        </div>
-    </div>
-
-    <form method="POST" action="{{ route('guest.login') }}">
-        @csrf
-        <flux:button type="submit" variant="filled" class="w-full !bg-neutral-100 dark:!bg-neutral-800 !text-neutral-700 dark:!text-neutral-300 hover:!bg-neutral-200 dark:hover:!bg-neutral-700 !border !border-neutral-200 dark:!border-neutral-700">
-            <span class="inline-flex items-center">
-                <svg class="w-4 h-4 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24" stroke-width="1.5">
-                    <path stroke-linecap="round" stroke-linejoin="round" d="M15.75 6a3.75 3.75 0 1 1-7.5 0 3.75 3.75 0 0 1 7.5 0ZM4.501 20.118a7.5 7.5 0 0 1 14.998 0" />
-                </svg>
-                ゲストとしてログイン
-            </span>
-        </flux:button>
-        <p class="text-xs text-center text-zinc-400 mt-2">登録なしで閲覧・コメントができます</p>
-    </form>
-
     @if (Route::has('register'))
         <div class="space-x-1 rtl:space-x-reverse text-center text-sm text-zinc-600 dark:text-zinc-400">
             {{ __('Don\'t have an account?') }}

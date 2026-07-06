@@ -29,6 +29,8 @@ class CommentSection extends Component
 
     public function save()
     {
+        abort_unless(auth()->check(), 403);
+
         $inputs = $this->validate([
             'body' => 'required|max:1000',
         ]);

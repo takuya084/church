@@ -21,16 +21,10 @@
         </div>
       </a>
       <nav>
-        @if (Route::has('login'))
-          @auth
-            <a href="{{ url('/dashboard') }}">一覧へ</a>
-          @else
-            <a href="{{ route('login') }}">ログイン</a>
-            @if (Route::has('register'))
-              <a href="{{ route('register') }}">新規登録</a>
-            @endif
-          @endauth
-        @endif
+        <a href="{{ route('post.index') }}">礼拝動画</a>
+        @guest
+          <a href="{{ route('login') }}">ログイン</a>
+        @endguest
       </nav>
     </div>
   </header>
@@ -40,6 +34,12 @@
     <div class="container">
       <h2>毎週土曜日 9時半〜12時</h2>
       <p>お気軽にお越しください！</p>
+      <a href="{{ route('post.index') }}" class="btn-watch">
+        <svg fill="currentColor" viewBox="0 0 24 24" aria-hidden="true">
+          <path d="M8 5.14v13.72c0 .8.87 1.3 1.56.88l10.54-6.86a1.04 1.04 0 0 0 0-1.76L9.56 4.26A1.04 1.04 0 0 0 8 5.14Z"/>
+        </svg>
+        礼拝の動画を見る
+      </a>
     </div>
   </section>
 

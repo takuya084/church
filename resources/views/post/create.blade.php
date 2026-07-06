@@ -16,12 +16,53 @@
                 <form method="post" action="{{ route('post.store') }}" class="space-y-6">
                     @csrf
 
+                    {{-- YouTube URL --}}
+                    <div>
+                        <label class="block text-sm font-semibold text-neutral-700 dark:text-neutral-300 mb-2">YouTube 動画 URL</label>
+                        <div id="youtube-urls-wrapper" class="space-y-2">
+                            <div class="youtube-url-row flex items-center gap-2" data-index="0">
+                                <div class="flex flex-col gap-0.5">
+                                    <button type="button" onclick="moveUrl(this, -1)" title="上へ"
+                                            class="p-0.5 text-neutral-400 hover:text-neutral-700 dark:hover:text-neutral-200 transition-colors disabled:opacity-30" disabled>
+                                        <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24" stroke-width="2">
+                                            <path stroke-linecap="round" stroke-linejoin="round" d="m4.5 15.75 7.5-7.5 7.5 7.5" />
+                                        </svg>
+                                    </button>
+                                    <button type="button" onclick="moveUrl(this, 1)" title="下へ"
+                                            class="p-0.5 text-neutral-400 hover:text-neutral-700 dark:hover:text-neutral-200 transition-colors disabled:opacity-30" disabled>
+                                        <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24" stroke-width="2">
+                                            <path stroke-linecap="round" stroke-linejoin="round" d="m19.5 8.25-7.5 7.5-7.5-7.5" />
+                                        </svg>
+                                    </button>
+                                </div>
+                                <input type="text" name="youtube_urls[]"
+                                       placeholder="YouTubeのURLをそのまま貼り付け（youtu.be／watch どちらでもOK）"
+                                       class="flex-1 px-4 py-3 bg-neutral-50 dark:bg-neutral-900 border border-neutral-200 dark:border-neutral-700 rounded-xl text-sm focus:outline-none focus:ring-2 focus:ring-gray-400/30 focus:border-gray-400 transition-all duration-200"
+                                       value="{{ old('youtube_urls.0') }}">
+                                <button type="button" onclick="removeUrl(this)" title="削除"
+                                        class="p-2 text-neutral-400 hover:text-red-500 transition-colors rounded-lg hover:bg-red-50 dark:hover:bg-red-900/20">
+                                    <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24" stroke-width="1.5">
+                                        <path stroke-linecap="round" stroke-linejoin="round" d="M6 18 18 6M6 6l12 12" />
+                                    </svg>
+                                </button>
+                            </div>
+                        </div>
+                        <button type="button" id="add-url"
+                                class="mt-3 inline-flex items-center gap-1 text-sm font-medium text-gray-600 dark:text-gray-400 hover:text-gray-800 dark:hover:text-gray-300 transition-colors">
+                            <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24" stroke-width="2">
+                                <path stroke-linecap="round" stroke-linejoin="round" d="M12 4.5v15m7.5-7.5h-15" />
+                            </svg>
+                            URL を追加
+                        </button>
+                        <p class="mt-2 text-xs text-neutral-400">URLを貼ると動画のタイトルが下の「説教題」に自動で入ります（あとから書き換えられます）</p>
+                    </div>
+
                     {{-- 説教題 --}}
                     <div>
                         <label for="title" class="block text-sm font-semibold text-neutral-700 dark:text-neutral-300 mb-2">説教題</label>
                         <input type="text" name="title" id="title"
                                class="w-full px-4 py-3 bg-neutral-50 dark:bg-neutral-900 border border-neutral-200 dark:border-neutral-700 rounded-xl text-sm focus:outline-none focus:ring-2 focus:ring-gray-400/30 focus:border-gray-400 transition-all duration-200"
-                               placeholder="説教題を入力..."
+                               placeholder="URLを貼ると自動入力されます"
                                value="{{ old('title') }}">
                     </div>
 
@@ -46,46 +87,6 @@
                                class="w-full px-4 py-3 bg-neutral-50 dark:bg-neutral-900 border border-neutral-200 dark:border-neutral-700 rounded-xl text-sm focus:outline-none focus:ring-2 focus:ring-gray-400/30 focus:border-gray-400 transition-all duration-200"
                                placeholder="例：ヨハネ 3:16-18"
                                value="{{ old('bible_passage') }}">
-                    </div>
-
-                    {{-- YouTube URL --}}
-                    <div>
-                        <label class="block text-sm font-semibold text-neutral-700 dark:text-neutral-300 mb-2">YouTube 動画 URL</label>
-                        <div id="youtube-urls-wrapper" class="space-y-2">
-                            <div class="youtube-url-row flex items-center gap-2" data-index="0">
-                                <div class="flex flex-col gap-0.5">
-                                    <button type="button" onclick="moveUrl(this, -1)" title="上へ"
-                                            class="p-0.5 text-neutral-400 hover:text-neutral-700 dark:hover:text-neutral-200 transition-colors disabled:opacity-30" disabled>
-                                        <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24" stroke-width="2">
-                                            <path stroke-linecap="round" stroke-linejoin="round" d="m4.5 15.75 7.5-7.5 7.5 7.5" />
-                                        </svg>
-                                    </button>
-                                    <button type="button" onclick="moveUrl(this, 1)" title="下へ"
-                                            class="p-0.5 text-neutral-400 hover:text-neutral-700 dark:hover:text-neutral-200 transition-colors disabled:opacity-30" disabled>
-                                        <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24" stroke-width="2">
-                                            <path stroke-linecap="round" stroke-linejoin="round" d="m19.5 8.25-7.5 7.5-7.5-7.5" />
-                                        </svg>
-                                    </button>
-                                </div>
-                                <input type="text" name="youtube_urls[]"
-                                       placeholder="https://www.youtube.com/watch?v=…"
-                                       class="flex-1 px-4 py-3 bg-neutral-50 dark:bg-neutral-900 border border-neutral-200 dark:border-neutral-700 rounded-xl text-sm focus:outline-none focus:ring-2 focus:ring-gray-400/30 focus:border-gray-400 transition-all duration-200"
-                                       value="{{ old('youtube_urls.0') }}">
-                                <button type="button" onclick="removeUrl(this)" title="削除"
-                                        class="p-2 text-neutral-400 hover:text-red-500 transition-colors rounded-lg hover:bg-red-50 dark:hover:bg-red-900/20">
-                                    <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24" stroke-width="1.5">
-                                        <path stroke-linecap="round" stroke-linejoin="round" d="M6 18 18 6M6 6l12 12" />
-                                    </svg>
-                                </button>
-                            </div>
-                        </div>
-                        <button type="button" id="add-url"
-                                class="mt-3 inline-flex items-center gap-1 text-sm font-medium text-gray-600 dark:text-gray-400 hover:text-gray-800 dark:hover:text-gray-300 transition-colors">
-                            <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24" stroke-width="2">
-                                <path stroke-linecap="round" stroke-linejoin="round" d="M12 4.5v15m7.5-7.5h-15" />
-                            </svg>
-                            URL を追加
-                        </button>
                     </div>
 
                     {{-- Submit --}}

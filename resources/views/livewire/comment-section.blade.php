@@ -11,6 +11,7 @@
     @endif
 
     {{-- コメント入力フォーム --}}
+    @auth
     <form wire:submit="save">
         <textarea wire:model="body"
             class="w-full rounded-xl px-4 py-3 text-sm bg-white dark:bg-neutral-900 border border-neutral-200 dark:border-neutral-700 focus:outline-none focus:ring-2 focus:ring-gray-400/30 focus:border-gray-400 transition-all duration-200 resize-none"
@@ -21,6 +22,11 @@
             </flux:button>
         </div>
     </form>
+    @else
+    <p class="text-sm text-neutral-500 dark:text-neutral-400 bg-white dark:bg-neutral-900 border border-neutral-200 dark:border-neutral-700 rounded-xl px-4 py-3">
+        コメントを書くには<a href="{{ route('login') }}" class="underline font-semibold mx-1">ログイン</a>が必要です。
+    </p>
+    @endauth
 
     {{-- コメント一覧 --}}
     @if($comments->count())

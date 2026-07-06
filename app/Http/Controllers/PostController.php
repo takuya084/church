@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Models\Pastor;
 use App\Models\Post;
+use App\Support\YouTube;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Gate;
 
@@ -15,9 +16,21 @@ class PostController extends Controller
      */
     public function index()
     {
-        $posts = Post::orderBy('created_at', 'desc')->get();
-        $user = auth()->user();
-        return view('post.index', compact('posts', 'user'));
+        // 最新の投稿は「今週の礼拝」として1ページ目に大きく表示する
+        $latest = Post::with(['pastor', 'user', 'youtubeUrls'])
+            ->orderBy('created_at', 'desc')
+            ->first();
+
+        $posts = Post::with(['pastor', 'user', 'comments'])
+            ->when($latest, fn ($query) => $query->where('id', '!=', $latest->id))
+            ->orderBy('created_at', 'desc')
+            ->paginate(10);
+
+        $latestThumbnail = $latest
+            ? YouTube::thumbnail($latest->youtubeUrls->first()?->youtube_url)
+            : null;
+
+        return view('post.index', compact('posts', 'latest', 'latestThumbnail'));
     }
 
 
@@ -47,7 +60,7 @@ class PostController extends Controller
             'title'            => 'required|string|max:255',
             'pastor_id'        => 'nullable|exists:pastors,id',
             'bible_passage'    => 'nullable|string|max:255',
-            'youtube_urls.*'   => 'nullable|url',
+            'youtube_urls.*'   => ['nullable', 'url', self::youtubeUrlRule()],
         ]);
         $post = new Post();
         $post->title = $request->title;
@@ -57,11 +70,11 @@ class PostController extends Controller
 
         $post->save();
 
-        // YouTube URL の保存
+        // YouTube URL の保存（どの形式のURLでも埋め込み用に変換して保存）
         foreach ($request->youtube_urls ?? [] as $url) {
             if ($url) {
                 $post->youtubeUrls()->create([
-                    'youtube_url' => $url,
+                    'youtube_url' => YouTube::embedUrl($url),
                 ]);
             }
         }
@@ -98,7 +111,7 @@ class PostController extends Controller
             'pastor_id'        => 'nullable|exists:pastors,id',
             'bible_passage'    => 'nullable|string|max:255',
             'body'             => 'nullable|string',
-            'youtube_urls.*'   => 'nullable|url',
+            'youtube_urls.*'   => ['nullable', 'url', self::youtubeUrlRule()],
         ]);
 
         $post->title = $inputs['title'];
@@ -113,7 +126,7 @@ class PostController extends Controller
         foreach ($inputs['youtube_urls'] ?? [] as $url) {
             if ($url) {
                 $post->youtubeUrls()->create([
-                    'youtube_url' => $url,
+                    'youtube_url' => YouTube::embedUrl($url),
                 ]);
             }
         }
@@ -129,5 +142,28 @@ class PostController extends Controller
         Gate::authorize('delete', $post);
         $post->delete();
         return redirect()->route('post.index')->with('message', '投稿を削除しました');
+    }
+
+    /**
+     * 入力されたYouTube URLから動画タイトルを返す（説教題の自動入力用）
+     */
+    public function youtubeTitle(Request $request)
+    {
+        if (auth()->user()->isGuest()) {
+            abort(403);
+        }
+
+        return response()->json([
+            'title' => YouTube::title($request->query('url')),
+        ]);
+    }
+
+    private static function youtubeUrlRule(): \Closure
+    {
+        return function (string $attribute, mixed $value, \Closure $fail) {
+            if ($value && !YouTube::videoId($value)) {
+                $fail('YouTubeの動画URLを入力してください。');
+            }
+        };
     }
 }

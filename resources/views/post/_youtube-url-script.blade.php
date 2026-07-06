@@ -91,6 +91,26 @@
         updateArrowStates();
     };
 
+    // URLを貼り付けたら動画タイトルを説教題に自動入力（空欄のときだけ）
+    wrapper.addEventListener('change', function(e){
+        if (!e.target.matches('input[name="youtube_urls[]"]')) return;
+
+        const titleInput = document.getElementById('title');
+        const url = e.target.value.trim();
+        if (!titleInput || titleInput.value.trim() !== '' || url === '') return;
+
+        fetch('{{ route('post.youtube-title') }}?url=' + encodeURIComponent(url), {
+            headers: { 'Accept': 'application/json' }
+        })
+            .then(res => res.ok ? res.json() : null)
+            .then(data => {
+                if (data && data.title && titleInput.value.trim() === '') {
+                    titleInput.value = data.title;
+                }
+            })
+            .catch(() => {});
+    });
+
     // 初期化
     updateArrowStates();
 })();

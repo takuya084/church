@@ -9,7 +9,7 @@
     <flux:sidebar sticky stashable class="border-e border-neutral-200 bg-white dark:border-neutral-700 dark:bg-neutral-800">
         <flux:sidebar.toggle class="lg:hidden" icon="x-mark" />
 
-        <a href="{{ route('dashboard') }}" class="me-5 flex items-center space-x-2 rtl:space-x-reverse" wire:navigate>
+        <a href="{{ route('home') }}" class="me-5 flex items-center space-x-2 rtl:space-x-reverse" wire:navigate>
             <x-app-logo />
         </a>
 
@@ -21,7 +21,7 @@
                 <flux:navlist.item icon="home" :href="route('post.index')"
                     :current="request()->routeIs('post.index')" wire:navigate>一覧画面
                 </flux:navlist.item>
-                @if(!auth()->user()->isGuest())
+                @if(auth()->check() && !auth()->user()->isGuest())
                     <flux:navlist.item :href="route('post.create')" :current="request()->routeIs('post.create')"
                         wire:navigate>
                         <div class="flex items-center gap-2">
@@ -76,6 +76,7 @@
             </flux:navlist> --}}
 
         <!-- Desktop User Menu -->
+        @auth
         <flux:dropdown position="bottom" align="start">
             <flux:profile :name="auth()->user()->name" :initials="auth()->user()->initials()"
                 icon-trailing="chevrons-up-down" />
@@ -121,6 +122,13 @@
                 </form>
             </flux:menu>
         </flux:dropdown>
+        @else
+        <flux:navlist variant="outline">
+            <flux:navlist.item icon="arrow-right-end-on-rectangle" :href="route('login')" wire:navigate>
+                スタッフの方はログイン
+            </flux:navlist.item>
+        </flux:navlist>
+        @endauth
     </flux:sidebar>
 
     <!-- Mobile User Menu -->
@@ -129,6 +137,7 @@
 
         <flux:spacer />
 
+        @auth
         <flux:dropdown position="top" align="end">
             <flux:profile :initials="auth()->user()->initials()" icon-trailing="chevron-down" />
             <flux:menu>
@@ -172,6 +181,7 @@
                 </form>
             </flux:menu>
         </flux:dropdown>
+        @endauth
     </flux:header>
 
     {{ $slot }}
